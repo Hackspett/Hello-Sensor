@@ -3,11 +3,13 @@ package com.example.assigment1code;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class DisplayAccelerometerActivity extends AppCompatActivity implements SensorEventListener {
@@ -15,6 +17,7 @@ public class DisplayAccelerometerActivity extends AppCompatActivity implements S
     private SensorManager sensorManager;
     private Sensor accelerometer;
     TextView textX, textY, textZ;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,8 @@ public class DisplayAccelerometerActivity extends AppCompatActivity implements S
         textX = findViewById(R.id.textX);
         textY = findViewById(R.id.textY);
         textZ = findViewById(R.id.textZ);
+
+        view = this.getWindow().getDecorView();
     }
 
     @Override
@@ -48,9 +53,28 @@ public class DisplayAccelerometerActivity extends AppCompatActivity implements S
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        textX.setText(Float.toString(event.values[0]));
-        textY.setText(Float.toString(event.values[1]));
-        textZ.setText(Float.toString(event.values[2]));
+        float X = event.values[0];
+        float Y = event.values[1];
+        float Z = event.values[2];
+
+        textX.setText(Float.toString(X));
+        textY.setText(Float.toString(Y));
+        textZ.setText(Float.toString(Z));
+
+        float absX = Math.abs(X);
+        float absY = Math.abs(Y);
+        float absZ = Math.abs(Z);
+
+        float max = Math.max(Math.max(absX, absY), absZ);
+        int color;
+        if(max == absX){
+            color = Color.GREEN;
+        }else if(max == absY){
+            color = Color.BLUE;
+        }else{
+            color = Color.RED;
+        }
+        view.setBackgroundColor(color);
     }
 
 }

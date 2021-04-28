@@ -2,6 +2,7 @@ package com.example.assigment1code;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -23,6 +24,8 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
     // record the angle turned of the compass picture
     private float DegreeStart = 0f;
     TextView DegreeTV;
+    int defaultColor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,7 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
         DegreeTV = (TextView) findViewById(R.id.DegreeTV);
         // initialize your android device sensor capabilities
         SensorManage = (SensorManager) getSystemService(SENSOR_SERVICE);
+        defaultColor = DegreeTV.getCurrentTextColor();
     }
     @Override
     protected void onPause() {
@@ -51,6 +55,11 @@ public class DisplayCompass extends AppCompatActivity implements SensorEventList
     public void onSensorChanged(SensorEvent event) {
         // get angle around the z-axis rotated
         float degree = Math.round(event.values[0]);
+        if(345 < degree || degree < 15){
+            DegreeTV.setTextColor(Color.RED);
+        } else{
+            DegreeTV.setTextColor(defaultColor);
+        }
         DegreeTV.setText("Heading: " + Float.toString(degree) + " degrees");
         // rotation animation - reverse turn degree degrees
         RotateAnimation ra = new RotateAnimation(
